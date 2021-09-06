@@ -84,21 +84,21 @@ impl<'a> WebSockets<'a> {
         }
     }
 
-    pub fn connect(&mut self, subscription: &str) -> Result<()> {
-        self.connect_wss(WebsocketAPI::Default.params(subscription))
+    pub fn connect(&mut self, subscription: &str, proxy: String) -> Result<()> {
+        self.connect_wss(WebsocketAPI::Default.params(subscription), proxy)
     }
 
-    pub fn connect_with_config(&mut self, subscription: &str, config: &Config) -> Result<()> {
-        self.connect_wss(WebsocketAPI::Custom(config.ws_endpoint.clone()).params(subscription))
+    pub fn connect_with_config(&mut self, subscription: &str, config: &Config, proxy: String) -> Result<()> {
+        self.connect_wss(WebsocketAPI::Custom(config.ws_endpoint.clone()).params(subscription), proxy)
     }
 
-    pub fn connect_multiple_streams(&mut self, endpoints: &[String]) -> Result<()> {
-        self.connect_wss(WebsocketAPI::MultiStream.params(&endpoints.join("/")))
+    pub fn connect_multiple_streams(&mut self, endpoints: &[String], proxy: String) -> Result<()> {
+        self.connect_wss(WebsocketAPI::MultiStream.params(&endpoints.join("/")), proxy)
     }
 
-    fn connect_wss(&mut self, wss: String) -> Result<()> {
+    fn connect_wss(&mut self, wss: String, proxy: String) -> Result<()> {
         let url = Url::parse(&wss)?;
-        let proxy = "127.0.0.1:1080".to_string();
+        // let proxy = "127.0.0.1:1080".to_string();
         let proxy = Some(proxy.to_socket_addrs().unwrap().next().unwrap());
         // match connect(url) {
         match connect_with_config(url, None, 3, proxy) {

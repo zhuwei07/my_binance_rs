@@ -3,6 +3,8 @@ use binance::userstream::*;
 use binance::websockets::*;
 use std::sync::atomic::{AtomicBool, Ordering};
 
+const ProxyAddress: &str = "127.0.0.1:1080";
+
 fn main() {
     //user_stream();
     //user_stream_websocket();
@@ -65,7 +67,7 @@ fn user_stream_websocket() {
             Ok(())
         });
 
-        web_socket.connect(&listen_key).unwrap(); // check error
+        web_socket.connect(&listen_key, ProxyAddress.to_string()).unwrap(); // check error
         if let Err(e) = web_socket.event_loop(&keep_running) {
             println!("Error: {}", e);
         }
@@ -106,7 +108,7 @@ fn market_websocket() {
         Ok(())
     });
 
-    web_socket.connect(&agg_trade).unwrap(); // check error
+    web_socket.connect(&agg_trade, ProxyAddress.to_string()).unwrap(); // check error
     if let Err(e) = web_socket.event_loop(&keep_running) {
         println!("Error: {}", e);
     }
@@ -130,7 +132,7 @@ fn all_trades_websocket() {
         Ok(())
     });
 
-    web_socket.connect(&agg_trade).unwrap(); // check error
+    web_socket.connect(&agg_trade, ProxyAddress.to_string()).unwrap(); // check error
     if let Err(e) = web_socket.event_loop(&keep_running) {
         println!("Error: {}", e);
     }
@@ -152,7 +154,7 @@ fn kline_websocket() {
         Ok(())
     });
 
-    web_socket.connect(&kline).unwrap(); // check error
+    web_socket.connect(&kline, ProxyAddress.to_string()).unwrap(); // check error
     if let Err(e) = web_socket.event_loop(&keep_running) {
         println!("Error: {}", e);
     }
@@ -180,7 +182,7 @@ fn last_price_for_one_symbol() {
         Ok(())
     });
 
-    web_socket.connect(&agg_trade).unwrap(); // check error
+    web_socket.connect(&agg_trade, ProxyAddress.to_string()).unwrap(); // check error
     if let Err(e) = web_socket.event_loop(&keep_running) {
         println!("Error: {}", e);
     }
@@ -205,7 +207,7 @@ fn multiple_streams() {
         Ok(())
     });
 
-    web_socket.connect_multiple_streams(&endpoints).unwrap(); // check error
+    web_socket.connect_multiple_streams(&endpoints, ProxyAddress.to_string()).unwrap(); // check error
     if let Err(e) = web_socket.event_loop(&keep_running) {
         println!("Error: {}", e);
     }
